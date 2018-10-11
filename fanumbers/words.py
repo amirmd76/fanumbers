@@ -9,8 +9,8 @@ def _number_to_words(num, all_possibilities=False):
         if num < 20:
             return [consts.DIGITS_10[y]]
         if y == 0:
-            return consts.DIGITS_10_2[x]
-        return [" و ".format(consts.DIGITS_10_2[x], _number_to_words(y, all_possibilities)[0])]
+            return [consts.DIGITS_10_2[x]]
+        return ["{} و {}".format(consts.DIGITS_10_2[x], _number_to_words(y, all_possibilities)[0])]
     if num < 1000:
         x = int(str(num)[1:])
         f = int(str(num)[0])
@@ -18,7 +18,7 @@ def _number_to_words(num, all_possibilities=False):
         if x == 0:
             res2 = ['']
         else:
-            res2 = [item + " و " for item in _number_to_words(x, all_possibilities)]
+            res2 = [" و " + item for item in _number_to_words(x, all_possibilities)]
         for item in res2:
             if all_possibilities:
                 for w in consts.DIGITS_100[f]:
@@ -28,13 +28,15 @@ def _number_to_words(num, all_possibilities=False):
         return res
 
     if num < int(1e6):
-        x = int(str(num)[:3])
-        y = int(str(num)[3:])
+        nums = str(num)
+        nums = '0' * (6 - len(nums)) + nums
+        x = int(nums[:3])
+        y = int(nums[3:])
         res = []
         if y == 0:
             res2 = ['']
         else:
-            res2 = [item + " و " for item in _number_to_words(y, all_possibilities)]
+            res2 = [" و " + item for item in _number_to_words(y, all_possibilities)]
 
         pre = []
         if x == 1:
@@ -61,7 +63,7 @@ def _number_to_words(num, all_possibilities=False):
     if y == 0:
         res2 = ['']
     else:
-        res2 = [item + " و " for item in _number_to_words(y, all_possibilities)]
+        res2 = [" و " + item for item in _number_to_words(y, all_possibilities)]
     for f in pre:
         for item in res2:
             res.append(f + item)
@@ -72,8 +74,8 @@ def number_to_words(num, ordinal=False, all_possibilities=False):
     """
     :param num: an int, or a str containing arabic and persian digits, only works for < 1e15
     :param ordinal: a boolean, False for cardinal and True for ordinal
-    :param all: it can be True to return all possibilities
-    :return: a word, or a list of words in case all = True
+    :param all_possibilities: it can be True to return all possibilities
+    :return: a word, or a list of words in case all_possibilities = True
     """
     if not isinstance(num, int):
         num = numbers.from_fa_number(num)
@@ -87,11 +89,14 @@ def number_to_words(num, ordinal=False, all_possibilities=False):
                 return 'یکم'
     res = _number_to_words(num, all_possibilities)
     if ordinal:
-        if isinstance(res, list):
-            ans = []
-            for item in res:
-                ans.append(item + "م")
+        ans = []
+        for item in res:
+            ans.append(item + "م")
+        if all_possibilities:
             return ans
         else:
-            return res + "م"
-    return res
+            return ans[0]
+    if all_possibilities:
+        return res
+    return res[0]
+

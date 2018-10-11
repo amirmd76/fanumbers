@@ -36,6 +36,6 @@ def from_fa_number(num):
     """
     res = 0
     for x in num:
-        d = int(consts.ARABIC_TO_ENGLISH_DIGITS.get(x, consts.PERSIAN_TO_ENGLISH_DIGITS, None))
+        d = int(consts.ARABIC_TO_ENGLISH_DIGITS.get(x, consts.PERSIAN_TO_ENGLISH_DIGITS.get(x, None)))
         res = 10 * res + d
     return res
