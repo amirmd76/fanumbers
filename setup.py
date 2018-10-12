@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md'), 'r+', encoding='utf-8') as f:
 
 setup(
     name='fanumbers',
-    version='1.0.0',
+    version='1.0.1',
     description='Library to work with Farsi (Persian) numbers',
     author='AmirMohammad Dehghan',
     author_email='amirmd76@gmail.com',
